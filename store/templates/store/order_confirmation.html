@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed | ShopEase</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #333;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        .success-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            background: #e5f8ec;
+            color: #20a45b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #20a45b;
+            margin-bottom: 12px;
+        }
+
+        .message {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .order-info {
+            background: #f8f9fc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .order-info p {
+            margin: 10px 0;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .product {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 13px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .buttons a {
+            flex: 1;
+            text-align: center;
+            padding: 14px 10px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .orders-btn {
+            background: #2878e5;
+            color: white;
+        }
+
+        .shop-btn {
+            background: #e9edf5;
+            color: #333;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 22px;
+                margin: 15px auto;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="success-icon">✓</div>
+
+    <h1>Order Placed Successfully!</h1>
+
+    <p class="message">
+        Thank you for shopping with ShopEase.
+        Your order has been received successfully.
+    </p>
+
+    <div class="order-info">
+        <p><strong>Order ID:</strong> #{{ order.id }}</p>
+
+        <p>
+            <strong>Order Date:</strong>
+            {{ order.created_at|date:"d M Y, h:i A" }}
+        </p>
+
+        <p><strong>Order Status:</strong> {{ order.get_status_display }}</p>
+
+        <p><strong>Customer:</strong> {{ order.full_name }}</p>
+
+        <p><strong>Delivery City:</strong> {{ order.city }}</p>
+    </div>
+
+    <h2>Order Summary</h2>
+
+    {% for item in order.items.all %}
+        <div class="product">
+            <span>
+                {{ item.product_name }} × {{ item.quantity }}
+            </span>
+
+            <strong>
+                ₹{{ item.price|floatformat:2 }}
+            </strong>
+        </div>
+    {% endfor %}
+
+    <div class="total">
+        <span>Total Amount</span>
+        <span>₹{{ order.total_amount|floatformat:2 }}</span>
+    </div>
+
+    <div class="buttons">
+        <a href="{% url 'my_orders' %}" class="orders-btn">
+            View My Orders
+        </a>
+
+        <a href="{% url 'home' %}" class="shop-btn">
+            Continue Shopping
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

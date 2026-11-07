@@ -1,0 +1,186 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} | ShopEase</title>
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+
+    <style>
+        .product-detail-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 25px;
+        }
+
+        .product-detail-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 400px;
+            object-fit: contain;
+            background: #f7f7f7;
+            border-radius: 12px;
+        }
+
+        .detail-info {
+            padding: 15px 0;
+        }
+
+        .detail-info h1 {
+            font-size: 30px;
+            margin-bottom: 18px;
+        }
+
+        .detail-price {
+            color: #2878e5;
+            font-size: 27px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .detail-description {
+            line-height: 1.7;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .detail-stock {
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .detail-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .detail-buttons a,
+        .detail-buttons button {
+            padding: 13px 20px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: #e9edf5;
+            color: #333;
+        }
+
+        .detail-add-btn {
+            background: #2878e5;
+            color: white;
+        }
+
+        .detail-add-btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 700px) {
+            .product-detail-card {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-image {
+                height: 280px;
+            }
+
+            .detail-info h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="product-detail-container">
+
+    <div class="product-detail-card">
+
+        <div>
+            {% if product.image %}
+                <img
+                    src="{{ product.image.url }}"
+                    alt="{{ product.name }}"
+                    class="detail-image"
+                >
+            {% else %}
+                <div class="detail-image"
+                     style="display:flex;align-items:center;justify-content:center;">
+                    No Image Available
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="detail-info">
+
+            <h1>{{ product.name }}</h1>
+
+            <p><strong>Category:</strong> {{ product.get_category_display }}</p>
+
+            <div class="detail-price">
+                ₹{{ product.price }}
+            </div>
+
+            <h3>Description</h3>
+
+            <p class="detail-description">
+                {{ product.description|linebreaksbr }}
+            </p>
+
+            <p class="detail-stock">
+                {% if product.stock > 0 %}
+                    <span style="color:green;">
+                        In Stock: {{ product.stock }} available
+                    </span>
+                {% else %}
+                    <span style="color:red;">
+                        Out of Stock
+                    </span>
+                {% endif %}
+            </p>
+
+            <div class="detail-buttons">
+
+                <a href="{% url 'home' %}" class="back-btn">
+                    Back to Shopping
+                </a>
+
+                <button
+                    type="button"
+                    class="detail-add-btn"
+                    data-product-id="{{ product.id }}"
+                    {% if product.stock <= 0 %}disabled{% endif %}
+                >
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{% static 'store/js/script.js' %}"></script>
+
+</body>
+</html>

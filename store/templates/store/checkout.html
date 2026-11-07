@@ -1,0 +1,126 @@
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | ShopEase</title>
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+</head>
+<body>
+
+    <div class="auth-container">
+        <h1>Checkout</h1>
+
+        <h3>Order Summary</h3>
+
+        {% for item in items %}
+            <p>
+                {{ item.name }} × {{ item.quantity }}
+                — ₹{{ item.subtotal|floatformat:2 }}
+            </p>
+        {% endfor %}
+
+        <h3>Total: ₹{{ total|floatformat:2 }}</h3>
+
+        <hr>
+
+        <h3>Shipping Details</h3>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <p>
+                <label for="full_name">Full Name</label>
+                <input
+                    type="text"
+                    id="full_name"
+                    name="full_name"
+                    minlength="3"
+                    maxlength="150"
+                    pattern="[A-Za-z][A-Za-z .'-]*"
+                    title="Enter a valid name using letters."
+                    placeholder="Enter your full name"
+                    required>
+            </p>
+
+            <p>
+                <label for="email">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    maxlength="254"
+                    placeholder="example@gmail.com"
+                    required>
+            </p>
+
+            <p>
+                <label for="phone">Phone Number</label>
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    pattern="(\+91[- ]?)?[6-9][0-9]{9}"
+                    maxlength="14"
+                    title="Enter a valid 10-digit Indian mobile number, optionally with +91."
+                    placeholder="9876543210"
+                    required>
+            </p>
+
+            <p>
+                <label for="address">Address</label>
+                <textarea
+                    id="address"
+                    name="address"
+                    minlength="5"
+                    maxlength="500"
+                    placeholder="Enter your delivery address"
+                    required></textarea>
+            </p>
+
+            <p>
+                <label for="city">City</label>
+                <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    minlength="2"
+                    maxlength="100"
+                    placeholder="Enter your city"
+                    required>
+            </p>
+
+            <p>
+                <label for="postal_code">Postal Code</label>
+                <input
+                    type="text"
+                    id="postal_code"
+                    name="postal_code"
+                    inputmode="numeric"
+                    pattern="[1-9][0-9]{5}"
+                    minlength="6"
+                    maxlength="6"
+                    title="Enter a valid 6-digit Indian PIN code."
+                    placeholder="Enter 6-digit PIN code"
+                    required>
+            </p>
+
+            <button type="submit">Place Order</button>
+        </form>
+
+        <p>
+            <a href="{% url 'home' %}">Continue Shopping</a>
+        </p>
+    </div>
+
+</body>
+</html>

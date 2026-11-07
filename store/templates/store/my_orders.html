@@ -1,0 +1,50 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | ShopEase</title>
+    <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+</head>
+<body>
+
+    <div class="auth-container">
+        <h1>My Orders</h1>
+
+        {% for order in orders %}
+
+            <div class="order-card">
+                <h3>Order #{{ order.id }}</h3>
+
+                <p>Date: {{ order.created_at|date:"d M Y, h:i A" }}</p>
+
+                <p>Status: {{ order.get_status_display }}</p>
+
+                <p>Total: ₹{{ order.total_amount }}</p>
+
+                <h4>Products</h4>
+
+                {% for item in order.items.all %}
+                    <p>
+                        {{ item.product_name }}
+                        × {{ item.quantity }}
+                        — ₹{{ item.price }}
+                    </p>
+                {% endfor %}
+            </div>
+
+            <hr>
+
+        {% empty %}
+
+            <p>You haven't placed any orders yet.</p>
+
+        {% endfor %}
+
+        <a href="{% url 'home' %}">Continue Shopping</a>
+    </div>
+
+</body>
+</html>
